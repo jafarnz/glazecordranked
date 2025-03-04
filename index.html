@@ -3,11 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Glazecord Ranked</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Glazecord Ranked - A multiplayer donut-themed io game where you eat, grow, and dominate!">
+  <meta name="theme-color" content="#F5DEB3">
+  <title>Glazecord Ranked - Eat, Grow, Dominate!</title>
   <!-- Favicon -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="Glazecord Ranked">
+  <meta property="og:description" content="A multiplayer donut-themed io game. Eat, grow, and dominate!">
+  <meta property="og:image" content="favicon.ico">
+  <meta property="og:url" content="https://glazecordranked.com">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
   <!-- Socket.IO client library - server version -->
   <script src="/socket.io/socket.io.js"></script>
   <!-- Socket.IO client library - CDN fallback -->
@@ -18,46 +30,132 @@
   </script>
 </head>
 <body>
+  <!-- Game Canvas -->
   <canvas id="gameCanvas"></canvas>
   
+  <!-- Heads-Up Display -->
   <div id="hud">
-    <div id="score">Score: 0</div>
-    <div id="rank">Rank: Rookie Glazer</div>
-    <div id="flavor">Flavor: Plain</div>
+    <div class="hud-panel top-left">
+      <div id="score">Score: 0</div>
+      <div id="rank">Rank: Rookie Glazer</div>
+      <div id="flavor">Flavor: Plain</div>
+    </div>
+    <div class="hud-panel top-right">
+      <div id="fps">FPS: 0</div>
+      <div id="ping">Ping: 0ms</div>
+    </div>
+    <div class="hud-panel bottom-left">
+      <div id="playerCount">Players: 0</div>
+    </div>
+    <div class="hud-panel bottom-right">
+      <div id="mapLocation">Location: (0, 0)</div>
+    </div>
   </div>
   
+  <!-- Leaderboard -->
   <div id="leaderboard">
     <h3>Top Donuts</h3>
     <ol id="leaderboardList"></ol>
   </div>
   
+  <!-- Mini-map -->
+  <div id="minimap-container">
+    <canvas id="minimap"></canvas>
+    <div id="minimap-label">Map</div>
+  </div>
+  
+  <!-- Game Overlay -->
   <div id="overlay">
-    <div id="startScreen">
+    <!-- Start Screen -->
+    <div id="startScreen" class="game-screen">
       <div class="logo-container">
         <img src="favicon.ico" alt="Glazecord Logo" class="game-logo">
         <h1 id="gameTitle">Glazecord Ranked</h1>
+        <p class="tagline">Eat, grow, dominate the donut world!</p>
       </div>
-      <input type="text" id="playerNameInput" placeholder="Enter your donut name" maxlength="15">
-      <button id="startButton" class="button">Start Game</button>
-      <div id="controls">
-        <p>Controls:</p>
-        <p>• Move your mouse to navigate</p>
-        <p>• Press SPACE to split</p>
-        <p>• Press W to eject mass</p>
-        <p>• Eat smaller donuts to grow</p>
-        <p>• Avoid bigger donuts!</p>
+      
+      <div class="form-container">
+        <input type="text" id="playerNameInput" placeholder="Enter your donut name" maxlength="15">
+        <div class="button-row">
+          <button id="multiplayerButton" class="button primary-button">Multiplayer</button>
+          <button id="singlePlayerButton" class="button secondary-button">Single Player</button>
+        </div>
+      </div>
+      
+      <div class="game-help">
+        <div class="controls-section">
+          <h3>Controls</h3>
+          <ul>
+            <li><span class="control-key">Mouse</span> - Move your donut</li>
+            <li><span class="control-key">Space</span> - Split your donut</li>
+            <li><span class="control-key">W</span> - Eject mass</li>
+            <li><span class="control-key">E</span> - Toggle minimap</li>
+          </ul>
+        </div>
+        
+        <div class="tips-section">
+          <h3>Tips</h3>
+          <ul>
+            <li>Eat smaller donuts to grow</li>
+            <li>Split to catch opponents</li>
+            <li>Avoid bigger donuts!</li>
+            <li>Run from red borders</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="settings-panel">
+        <h3>Settings</h3>
+        <div class="setting-row">
+          <label for="qualitySelect">Graphics:</label>
+          <select id="qualitySelect">
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <label for="soundToggle">Sound:</label>
+          <label class="toggle">
+            <input type="checkbox" id="soundToggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="footer">
+        <a href="https://github.com/jafarnz/glazecordranked" target="_blank">GitHub</a>
+        <span class="version">v1.0.0</span>
       </div>
     </div>
     
-    <div id="gameOverScreen">
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen" class="game-screen">
       <div class="logo-container">
         <img src="favicon.ico" alt="Glazecord Logo" class="game-logo">
         <h2>Game Over!</h2>
       </div>
-      <div id="finalScore">Score: 0</div>
-      <button id="restartButton" class="button">Play Again</button>
+      <div id="finalStats">
+        <div id="finalScore">Score: 0</div>
+        <div id="timeAlive">Time Alive: 0:00</div>
+        <div id="finalRank">Final Rank: Rookie Glazer</div>
+        <div id="donuts-eaten">Donuts Eaten: 0</div>
+      </div>
+      <div class="button-row">
+        <button id="restartButton" class="button primary-button">Play Again</button>
+        <button id="shareButton" class="button secondary-button">Share Score</button>
+      </div>
+    </div>
+    
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="game-screen">
+      <div class="loader"></div>
+      <p>Preparing donuts...</p>
     </div>
   </div>
+  
+  <!-- Game Notifications -->
+  <div id="notifications-container"></div>
   
   <!-- Load scripts in the correct order -->
   <script src="config.js"></script>

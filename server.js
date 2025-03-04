@@ -566,20 +566,34 @@ io.on('connection', (socket) => {
           eaterPiece.size = MAX_PLAYER_SIZE;
         }
         
+        // Recalculate speed based on new size
+        eaterPiece.speed = calculateSpeed(eaterPiece.size);
+        
         // Remove victim piece
         victim.pieces = victim.pieces.filter(p => p.id !== victimPiece.id);
         
         // If victim has no more pieces, remove player
         if (victim.pieces.length === 0) {
+          // Remove the player from the game
           delete players[data.victimId];
           io.to(data.victimId).emit('gameOver');
         }
         
-        // Update player state for all clients
+        // Update both players' state for all clients
         io.emit('playerUpdate', {
           id: socket.id,
           pieces: eater.pieces
         });
+        
+        // Also broadcast the victim's updated state (or removal)
+        if (victim.pieces.length > 0) {
+          io.emit('playerUpdate', {
+            id: data.victimId,
+            pieces: victim.pieces
+          });
+        } else {
+          io.emit('playerDisconnect', { id: data.victimId });
+        }
         
         // Update leaderboard
         updateLeaderboard();
@@ -611,8 +625,17 @@ io.on('connection', (socket) => {
                 eaterPiece.size = MAX_PLAYER_SIZE;
               }
               
+              // Recalculate speed based on new size
+              eaterPiece.speed = calculateSpeed(eaterPiece.size);
+              
               // Remove AI piece
               ai.pieces.splice(j, 1);
+              
+              // Broadcast the AI update to all clients
+              io.emit('aiUpdate', {
+                id: ai.id,
+                pieces: ai.pieces
+              });
               
               // If AI has no more pieces, remove it and add a new one
               if (ai.pieces.length === 0) {
@@ -620,6 +643,12 @@ io.on('connection', (socket) => {
                 
                 // Create a new AI player
                 createAIPlayer();
+                
+                // Broadcast updated AI list
+                io.emit('update', {
+                  aiPlayers: aiPlayers,
+                  foods: foods.filter(food => food.isEjected)
+                });
               }
               
               // Update player state for all clients
