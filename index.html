@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glazecord Ranked</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <!-- Socket.IO client library - server version -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Socket.IO client library - CDN fallback -->
+  <script>
+    if (typeof io === 'undefined') {
+      document.write('<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"><\/script>');
+    }
+  </script>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  
+  <div id="hud">
+    <div id="score">Score: 0</div>
+    <div id="rank">Rank: Rookie Glazer</div>
+    <div id="flavor">Flavor: Plain</div>
+  </div>
+  
+  <div id="leaderboard">
+    <h3>Top Donuts</h3>
+    <ol id="leaderboardList"></ol>
+  </div>
+  
+  <div id="overlay">
+    <div id="startScreen">
+      <div class="logo-container">
+        <img src="favicon.ico" alt="Glazecord Logo" class="game-logo">
+        <h1 id="gameTitle">Glazecord Ranked</h1>
+      </div>
+      <input type="text" id="playerNameInput" placeholder="Enter your donut name" maxlength="15">
+      <button id="startButton" class="button">Start Game</button>
+      <div id="controls">
+        <p>Controls:</p>
+        <p>• Move your mouse to navigate</p>
+        <p>• Press SPACE to split</p>
+        <p>• Press W to eject mass</p>
+        <p>• Eat smaller donuts to grow</p>
+        <p>• Avoid bigger donuts!</p>
+      </div>
+    </div>
+    
+    <div id="gameOverScreen">
+      <div class="logo-container">
+        <img src="favicon.ico" alt="Glazecord Logo" class="game-logo">
+        <h2>Game Over!</h2>
+      </div>
+      <div id="finalScore">Score: 0</div>
+      <button id="restartButton" class="button">Play Again</button>
+    </div>
+  </div>
+  
+  <!-- Load scripts in the correct order -->
+  <script src="config.js"></script>
+  <script src="utils.js"></script>
+  <script src="rendering.js"></script>
+  <script src="gameplay.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

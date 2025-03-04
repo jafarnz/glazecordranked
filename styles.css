@@ -1,0 +1,155 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f5e6e0;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+  }
+  
+  #gameCanvas {
+    display: block;
+    margin: 0 auto;
+    background-color: #fff9f5;
+  }
+  
+  #overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+  }
+  
+  #startScreen {
+    background-color: #ff9eb5;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 80%;
+  }
+  
+  #gameTitle {
+    color: #fff;
+    font-size: 48px;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  #playerNameInput {
+    padding: 10px;
+    font-size: 18px;
+    width: 80%;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .button {
+    background-color: #41c7c7;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+    margin: 10px;
+  }
+  
+  .button:hover {
+    background-color: #3ab0b0;
+    transform: scale(1.05);
+  }
+  
+  #hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #ff6b95;
+    font-size: 20px;
+    text-shadow: 1px 1px 2px white;
+    pointer-events: none;
+  }
+  
+  #leaderboard {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(255, 158, 181, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    min-width: 200px;
+  }
+  
+  #leaderboard h3 {
+    margin-top: 0;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  #controls {
+    margin-top: 30px;
+    color: white;
+    background-color: rgba(65, 199, 199, 0.8);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+  }
+  
+  #gameOverScreen {
+    background-color: #ff9eb5;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    display: none;
+  }
+  
+  #finalScore {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: white;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .game-logo {
+    width: 64px;
+    height: 64px;
+    margin-right: 15px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    animation: pulse 2s infinite ease-in-out;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+  }
